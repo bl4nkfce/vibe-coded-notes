@@ -1,15 +1,13 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
+import animate from "tailwindcss-animate";
 
 const config = {
-  darkMode: ["class"],
+  darkMode: "class",
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-    "*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{ts,tsx}",
+    "./lib/**/*.{ts,tsx}",
   ],
-  prefix: "",
   theme: {
     container: {
       center: true,
@@ -25,6 +23,37 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        black: "#000000",
+        white: "#ffffff",
+        purple: {
+          500: "#A855F7",
+        },
+        pink: {
+          500: "#EC4899",
+          900: "#831843",
+        },
+        cyan: {
+          400: "#22D3EE",
+          500: "#06B6D4",
+          900: "#164E63",
+        },
+        blue: {
+          400: "#60A5FA",
+          500: "#3B82F6",
+          900: "#1E3A8A",
+        },
+        gray: {
+          200: "#E5E7EB",
+          300: "#D1D5DB",
+          400: "#9CA3AF",
+          500: "#6B7280",
+          900: "#111827",
+        },
+        red: {
+          300: "#FCA5A5",
+          400: "#F87171",
+          900: "#7F1D1D",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -52,13 +81,6 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        // Cyberpunk theme colors
-        neon: {
-          purple: "#a855f7",
-          pink: "#ec4899",
-          blue: "#3b82f6",
-          cyan: "#06b6d4",
         },
       },
       borderRadius: {
@@ -91,7 +113,7 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config
+  plugins: [animate],
+} satisfies Config;
 
-export default config
+export default config;
