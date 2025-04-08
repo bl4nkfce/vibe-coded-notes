@@ -21,6 +21,7 @@ export function CreateNoteForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle note creation logic here
+    console.log('Creating note of type:', noteType);
     setIsExpanded(false);
   };
 

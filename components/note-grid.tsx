@@ -6,8 +6,46 @@ import { TodoNote } from '@/components/notes/todo-note';
 import { LinkNote } from '@/components/notes/link-note';
 import { ImageNote } from '@/components/notes/image-note';
 
+type TodoItem = {
+  id: string;
+  text: string;
+  completed: boolean;
+};
+
+type BaseNote = {
+  id: string;
+  type: string;
+  title: string;
+  color: string;
+  createdAt: string;
+};
+
+type TextNoteType = BaseNote & {
+  type: 'text';
+  content: string;
+};
+
+type TodoNoteType = BaseNote & {
+  type: 'todo';
+  items: TodoItem[];
+};
+
+type LinkNoteType = BaseNote & {
+  type: 'link';
+  url: string;
+  description: string;
+};
+
+type ImageNoteType = BaseNote & {
+  type: 'image';
+  imageUrl: string;
+  description: string;
+};
+
+type Note = TextNoteType | TodoNoteType | LinkNoteType | ImageNoteType;
+
 // Sample data for demonstration
-const initialNotes = [
+const initialNotes: Note[] = [
   {
     id: '1',
     type: 'text',
@@ -74,7 +112,7 @@ const initialNotes = [
 ];
 
 export function NoteGrid() {
-  const [notes, setNotes] = useState(initialNotes);
+  const [notes, setNotes] = useState<Note[]>(initialNotes);
 
   const handleDeleteNote = (id: string) => {
     setNotes(notes.filter((note) => note.id !== id));
