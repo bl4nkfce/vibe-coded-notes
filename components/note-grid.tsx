@@ -15,7 +15,7 @@ const initialNotes = [
     content:
       "Remember to finish the main storyline and explore Night City's hidden areas.",
     color: 'purple',
-    createdAt: new Date().toISOString(),
+    createdAt: '2005-04-02T21:37:00Z',
   },
   {
     id: '2',
@@ -28,7 +28,7 @@ const initialNotes = [
       { id: 't4', text: 'Reinforced tendons', completed: false },
     ],
     color: 'pink',
-    createdAt: new Date().toISOString(),
+    createdAt: '2005-04-02T21:37:00Z',
   },
   {
     id: '3',
@@ -38,7 +38,7 @@ const initialNotes = [
     description:
       'Check out the latest hacking techniques and security bypasses.',
     color: 'cyan',
-    createdAt: new Date().toISOString(),
+    createdAt: '2005-04-02T21:37:00Z',
   },
   {
     id: '4',
@@ -47,7 +47,7 @@ const initialNotes = [
     imageUrl: '/placeholder.svg?height=300&width=400',
     description: 'View from the Arasaka Tower at night.',
     color: 'blue',
-    createdAt: new Date().toISOString(),
+    createdAt: '2005-04-02T21:37:00Z',
   },
   {
     id: '5',
@@ -56,7 +56,7 @@ const initialNotes = [
     content:
       'The line between reality and digital consciousness grows thinner every day. Are memories just data waiting to be corrupted?',
     color: 'purple',
-    createdAt: new Date().toISOString(),
+    createdAt: '2005-04-02T21:37:00Z',
   },
   {
     id: '6',
@@ -69,7 +69,7 @@ const initialNotes = [
       { id: 't8', text: 'Hire backup', completed: false },
     ],
     color: 'pink',
-    createdAt: new Date().toISOString(),
+    createdAt: '2005-04-02T21:37:00Z',
   },
 ];
 

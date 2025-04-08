@@ -15,6 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { formatDate } from '@/lib/utils';
 
 interface ImageNoteProps {
   note: {
@@ -94,9 +95,7 @@ export function ImageNote({ note, onDelete }: ImageNoteProps) {
         <p className="text-gray-300">{note.description}</p>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <p className="text-xs text-gray-500">
-          {new Date(note.createdAt).toLocaleDateString()}
-        </p>
+        <p className="text-xs text-gray-500">{formatDate()}</p>
       </CardFooter>
     </Card>
   );

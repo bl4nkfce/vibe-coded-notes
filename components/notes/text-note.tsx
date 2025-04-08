@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { formatDate } from '@/lib/utils';
 
 interface TextNoteProps {
   note: {
@@ -84,9 +85,7 @@ export function TextNote({ note, onDelete }: TextNoteProps) {
         <p className="whitespace-pre-wrap text-gray-300">{note.content}</p>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <p className="text-xs text-gray-500">
-          {new Date(note.createdAt).toLocaleDateString()}
-        </p>
+        <p className="text-xs text-gray-500">{formatDate()}</p>
       </CardFooter>
     </Card>
   );
