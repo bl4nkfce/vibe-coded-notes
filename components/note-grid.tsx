@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { match } from 'ts-pattern';
 import { TextNote } from '@/components/notes/text-note';
 import { TodoNote } from '@/components/notes/todo-note';
 import { LinkNote } from '@/components/notes/link-note';
@@ -71,7 +72,7 @@ export function NoteGrid() {
       if (!response.ok) throw new Error('Failed to fetch notes');
       const data = (await response.json()) as ApiNote[];
 
-      // Transform API data to match our note types
+      // Transform API data to match our note types using ts-pattern
       const transformedNotes = data
         .map((note) => {
           const baseNote = {
@@ -82,41 +83,35 @@ export function NoteGrid() {
             createdAt: note.createdAt,
           };
 
-          switch (note.type) {
-            case 'text':
-              return {
-                ...baseNote,
-                type: 'text',
-                content: note.content,
-              };
-            case 'todo':
-              return {
-                ...baseNote,
-                type: 'todo',
-                items:
-                  note.metadata?.items?.map((item, index) => ({
-                    id: `t${index}`,
-                    text: item,
-                    completed: false,
-                  })) || [],
-              };
-            case 'link':
-              return {
-                ...baseNote,
-                type: 'link',
-                url: note.metadata?.url || '',
-                description: note.content,
-              };
-            case 'image':
-              return {
-                ...baseNote,
-                type: 'image',
-                imageUrl: note.metadata?.imageUrl || '',
-                description: note.content,
-              };
-            default:
-              return null;
-          }
+          return match(note.type)
+            .with('text', () => ({
+              ...baseNote,
+              type: 'text' as const,
+              content: note.content,
+            }))
+            .with('todo', () => ({
+              ...baseNote,
+              type: 'todo' as const,
+              items:
+                note.metadata?.items?.map((item, index) => ({
+                  id: `t${index}`,
+                  text: item,
+                  completed: false,
+                })) || [],
+            }))
+            .with('link', () => ({
+              ...baseNote,
+              type: 'link' as const,
+              url: note.metadata?.url || '',
+              description: note.content,
+            }))
+            .with('image', () => ({
+              ...baseNote,
+              type: 'image' as const,
+              imageUrl: note.metadata?.imageUrl || '',
+              description: note.content,
+            }))
+            .otherwise(() => null);
         })
         .filter(Boolean) as Note[];
 
@@ -166,45 +161,39 @@ export function NoteGrid() {
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {notes.map((note) => {
-        switch (note.type) {
-          case 'text':
-            return (
-              <TextNote
-                key={note.id}
-                note={note}
-                onDelete={() => handleDeleteNote(note.id)}
-              />
-            );
-          case 'todo':
-            return (
-              <TodoNote
-                key={note.id}
-                note={note}
-                onDelete={() => handleDeleteNote(note.id)}
-                onToggle={(todoId) => handleToggleTodo(note.id, todoId)}
-              />
-            );
-          case 'link':
-            return (
-              <LinkNote
-                key={note.id}
-                note={note}
-                onDelete={() => handleDeleteNote(note.id)}
-              />
-            );
-          case 'image':
-            return (
-              <ImageNote
-                key={note.id}
-                note={note}
-                onDelete={() => handleDeleteNote(note.id)}
-              />
-            );
-          default:
-            return null;
-        }
-      })}
+      {notes.map((note) =>
+        match(note)
+          .with({ type: 'text' }, (note) => (
+            <TextNote
+              key={note.id}
+              note={note}
+              onDelete={() => handleDeleteNote(note.id)}
+            />
+          ))
+          .with({ type: 'todo' }, (note) => (
+            <TodoNote
+              key={note.id}
+              note={note}
+              onDelete={() => handleDeleteNote(note.id)}
+              onToggle={(todoId) => handleToggleTodo(note.id, todoId)}
+            />
+          ))
+          .with({ type: 'link' }, (note) => (
+            <LinkNote
+              key={note.id}
+              note={note}
+              onDelete={() => handleDeleteNote(note.id)}
+            />
+          ))
+          .with({ type: 'image' }, (note) => (
+            <ImageNote
+              key={note.id}
+              note={note}
+              onDelete={() => handleDeleteNote(note.id)}
+            />
+          ))
+          .otherwise(() => null)
+      )}
     </div>
   );
 }
