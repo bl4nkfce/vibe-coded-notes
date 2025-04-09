@@ -6,6 +6,7 @@ import { TextNote } from '@/components/notes/text-note';
 import { TodoNote } from '@/components/notes/todo-note';
 import { LinkNote } from '@/components/notes/link-note';
 import { ImageNote } from '@/components/notes/image-note';
+import { NOTE_COLORS, type NoteColor } from '@/lib/colors';
 
 type TodoItem = {
   id: string;
@@ -17,7 +18,7 @@ type BaseNote = {
   id: string;
   type: string;
   title: string;
-  color: string;
+  color: NoteColor;
   createdAt: string;
 };
 
@@ -55,6 +56,7 @@ type ApiNote = {
     url?: string;
     imageUrl?: string;
     items?: string[];
+    color?: NoteColor;
   };
 };
 
@@ -79,7 +81,7 @@ export function NoteGrid() {
             id: note.id,
             type: note.type,
             title: note.metadata?.title || 'Untitled Note',
-            color: getRandomColor(),
+            color: note.metadata?.color || NOTE_COLORS[0].value,
             createdAt: note.createdAt,
           };
 
@@ -196,9 +198,4 @@ export function NoteGrid() {
       )}
     </div>
   );
-}
-
-function getRandomColor() {
-  const colors = ['purple', 'pink', 'cyan', 'blue'];
-  return colors[Math.floor(Math.random() * colors.length)];
 }

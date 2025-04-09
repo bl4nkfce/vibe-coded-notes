@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { formatDate } from '@/lib/utils';
+import { type NoteColor } from '@/lib/colors';
 
 interface LinkNoteProps {
   note: {
@@ -22,31 +23,21 @@ interface LinkNoteProps {
     type: string;
     title: string;
     url: string;
-    description: string;
-    color: string;
+    color: NoteColor;
     createdAt: string;
   };
   onDelete: () => void;
 }
 
 export function LinkNote({ note, onDelete }: LinkNoteProps) {
-  const colorMap = {
-    purple: 'from-purple-500/20 to-purple-900/20 border-purple-500/30',
-    pink: 'from-pink-500/20 to-pink-900/20 border-pink-500/30',
-    cyan: 'from-cyan-500/20 to-cyan-900/20 border-cyan-500/30',
-    blue: 'from-blue-500/20 to-blue-900/20 border-blue-500/30',
-  };
-
-  const glowMap = {
-    purple: 'shadow-purple-500/20',
-    pink: 'shadow-pink-500/20',
-    cyan: 'shadow-cyan-500/20',
-    blue: 'shadow-blue-500/20',
-  };
-
   return (
     <Card
-      className={`bg-gradient-to-br ${colorMap[note.color as keyof typeof colorMap]} border backdrop-blur-sm ${glowMap[note.color as keyof typeof glowMap]} transition-all duration-300 hover:shadow-lg`}
+      className="backdrop-blur-sm transition-all duration-300 hover:shadow-lg"
+      style={{
+        background: `linear-gradient(to bottom right, ${note.color}20, ${note.color}10)`,
+        borderColor: `${note.color}30`,
+        boxShadow: `0 0 20px ${note.color}20`,
+      }}
     >
       <CardHeader className="flex flex-row items-start justify-between p-4 pb-2">
         <h3 className="text-lg font-bold text-white">{note.title}</h3>
@@ -82,17 +73,16 @@ export function LinkNote({ note, onDelete }: LinkNoteProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>
-      <CardContent className="space-y-2 p-4 pt-2">
+      <CardContent className="p-4 pt-2">
         <a
           href={note.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 text-cyan-400 transition-colors hover:text-cyan-300"
+          className="group flex items-center gap-2 text-cyan-400 hover:text-cyan-300"
         >
-          {note.url}
-          <ExternalLink className="h-3 w-3" />
+          <span className="truncate">{note.url}</span>
+          <ExternalLink className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
         </a>
-        <p className="text-gray-300">{note.description}</p>
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <p className="text-xs text-gray-500">{formatDate()}</p>

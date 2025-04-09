@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { type NoteColor } from '@/lib/colors';
 
 type NoteType = 'text' | 'todo' | 'link' | 'image';
 
@@ -12,6 +13,7 @@ interface Note {
     url?: string;
     imageUrl?: string;
     items?: string[];
+    color?: NoteColor;
   };
 }
 
@@ -38,7 +40,11 @@ export async function POST(request: Request) {
       type,
       content,
       createdAt: new Date().toISOString(),
-      metadata,
+      metadata: {
+        ...metadata,
+        // Ensure we have a valid color
+        color: metadata?.color || '#8B5CF6', // Default to purple
+      },
     };
 
     notes.push(newNote);

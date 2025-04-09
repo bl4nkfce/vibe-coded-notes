@@ -13,11 +13,14 @@ import {
 } from '@/components/ui/select';
 import { ListTodo, FileText, LinkIcon, ImageIcon, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ColorPicker } from '@/components/color-picker';
+import { NOTE_COLORS, type NoteColor } from '@/lib/colors';
 
 export function CreateNoteForm() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [noteType, setNoteType] = useState('text');
   const [content, setContent] = useState('');
+  const [color, setColor] = useState<NoteColor>(NOTE_COLORS[0].value);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
@@ -36,6 +39,7 @@ export function CreateNoteForm() {
           content,
           metadata: {
             title: content.split('\n')[0] || 'Untitled Note',
+            color,
           },
         }),
       });
@@ -46,6 +50,7 @@ export function CreateNoteForm() {
 
       // Reset form and refresh the page to show new note
       setContent('');
+      setColor(NOTE_COLORS[0].value);
       setIsExpanded(false);
       router.refresh();
     } catch (error) {
@@ -115,6 +120,8 @@ export function CreateNoteForm() {
                     </SelectItem>
                   </SelectContent>
                 </Select>
+
+                <ColorPicker value={color} onChange={setColor} />
               </div>
 
               <div className="flex gap-2">
