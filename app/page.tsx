@@ -1,3 +1,5 @@
+'use client';
+
 import { Header } from '@/components/header';
 import { NoteGrid } from '@/components/note-grid';
 import { CreateNoteForm } from '@/components/create-note-form';

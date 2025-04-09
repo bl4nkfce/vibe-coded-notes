@@ -1,7 +1,6 @@
 'use client';
 
 import type React from 'react';
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -13,16 +12,47 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { ListTodo, FileText, LinkIcon, ImageIcon, Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export function CreateNoteForm() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [noteType, setNoteType] = useState('text');
+  const [content, setContent] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle note creation logic here
-    console.log('Creating note of type:', noteType);
-    setIsExpanded(false);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/notes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: noteType,
+          content,
+          metadata: {
+            title: content.split('\n')[0] || 'Untitled Note',
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create note');
+      }
+
+      // Reset form and refresh the page to show new note
+      setContent('');
+      setIsExpanded(false);
+      router.refresh();
+    } catch (error) {
+      console.error('Error creating note:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -47,6 +77,8 @@ export function CreateNoteForm() {
               placeholder="Take a note..."
               className="resize-none border-none bg-transparent p-0 text-gray-200 placeholder:text-gray-500 focus-visible:ring-0 focus-visible:ring-offset-0"
               rows={3}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
               autoFocus
             />
 
@@ -96,9 +128,10 @@ export function CreateNoteForm() {
                 </Button>
                 <Button
                   type="submit"
-                  className="border-none bg-gradient-to-r from-purple-600 to-cyan-600 text-white hover:from-purple-700 hover:to-cyan-700"
+                  disabled={isSubmitting}
+                  className="border-none bg-gradient-to-r from-purple-600 to-cyan-600 text-white hover:from-purple-700 hover:to-cyan-700 disabled:opacity-50"
                 >
-                  Add
+                  {isSubmitting ? 'Adding...' : 'Add'}
                 </Button>
               </div>
             </div>
