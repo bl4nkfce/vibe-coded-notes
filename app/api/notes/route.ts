@@ -57,3 +57,30 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const { id } = await request.json();
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Note ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const noteIndex = notes.findIndex((note) => note.id === id);
+    if (noteIndex === -1) {
+      return NextResponse.json({ error: 'Note not found' }, { status: 404 });
+    }
+
+    notes.splice(noteIndex, 1);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting note:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete note' },
+      { status: 500 }
+    );
+  }
+}

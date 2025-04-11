@@ -126,8 +126,23 @@ export function NoteGrid() {
   };
 
   const handleDeleteNote = async (id: string) => {
-    // TODO: Implement delete functionality in API
-    setNotes(notes.filter((note) => note.id !== id));
+    try {
+      const response = await fetch('/api/notes', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete note');
+      }
+
+      setNotes(notes.filter((note) => note.id !== id));
+    } catch (error) {
+      console.error('Error deleting note:', error);
+    }
   };
 
   const handleToggleTodo = async (noteId: string, todoId: string) => {
